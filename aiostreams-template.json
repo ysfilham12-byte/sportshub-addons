@@ -1,0 +1,107 @@
+{
+  "metadata": {
+    "id": "sportshub.live-sports",
+    "name": "SportsHub live sports",
+    "description": "Configure each sports addon on its own setup page first, then paste its configured manifest URL here. Enter at least one source.",
+    "author": "SportsHub",
+    "category": "Sports",
+    "version": "1.0.1",
+    "source": "external",
+    "services": [],
+    "inputs": [
+      {
+        "id": "nuvio",
+        "name": "NuvioLiveSports",
+        "description": "Optional. Paste your own configured manifest URL.",
+        "type": "url"
+      },
+      {
+        "id": "highfly",
+        "name": "HighFly Sports",
+        "description": "Optional. Paste your own configured manifest URL.",
+        "type": "url"
+      },
+      {
+        "id": "cnc",
+        "name": "CNCVerse",
+        "description": "Optional. Paste your own configured manifest URL.",
+        "type": "url"
+      },
+      {
+        "id": "pp",
+        "name": "PenguPlay",
+        "description": "Optional. Paste your own configured manifest URL.",
+        "type": "url"
+      }
+    ]
+  },
+  "config": {
+    "addonName": "AIOStreams Sports",
+    "presets": [
+      {
+        "__if": "inputs.nuvio",
+        "type": "custom",
+        "instanceId": "a01",
+        "enabled": true,
+        "options": {
+          "name": "NuvioLiveSports",
+          "manifestUrl": "{{inputs.nuvio}}",
+          "resources": [
+            "catalog",
+            "meta",
+            "stream"
+          ],
+          "formatPassthrough": true
+        }
+      },
+      {
+        "__if": "inputs.highfly",
+        "type": "custom",
+        "instanceId": "a02",
+        "enabled": true,
+        "options": {
+          "name": "HighFly Sports",
+          "manifestUrl": "{{inputs.highfly}}",
+          "resources": [
+            "catalog",
+            "meta",
+            "stream"
+          ],
+          "formatPassthrough": true
+        }
+      },
+      {
+        "__if": "inputs.cnc",
+        "type": "custom",
+        "instanceId": "a03",
+        "enabled": true,
+        "options": {
+          "name": "CNCVerse",
+          "manifestUrl": "{{inputs.cnc}}",
+          "resources": [
+            "catalog",
+            "meta",
+            "stream"
+          ],
+          "formatPassthrough": true
+        }
+      },
+      {
+        "__if": "inputs.pp",
+        "type": "custom",
+        "instanceId": "a04",
+        "enabled": true,
+        "options": {
+          "name": "PenguPlay",
+          "manifestUrl": "{{inputs.pp}}",
+          "resources": [
+            "catalog",
+            "meta",
+            "stream"
+          ],
+          "formatPassthrough": true
+        }
+      }
+    ]
+  }
+}

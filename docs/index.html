@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Set up SportsHub with your own sports addons and Cloudflare account.">
+  <title>SportsHub Setup</title>
+  <link rel="stylesheet" href="wizard.css?v=template-actions">
+  <script type="module" src="wizard.js?v=deploy-fields"></script>
+</head>
+<body>
+  <main>
+    <header class="masthead">
+      <a class="brand" href="./">Sports<span>Hub</span></a>
+      <a href="https://github.com/reelhumann-glitch/sportshub">GitHub ↗</a>
+    </header>
+    <h1>Set up SportsHub</h1>
+    <nav aria-label="Setup progress">
+      <ol id="progress">
+        <li aria-current="step">Sources</li><li>Catalogs</li><li>Deploy</li><li>Install</li>
+      </ol>
+    </nav>
+    <div class="panel">
+      <section data-step="0" aria-labelledby="sources-title">
+        <h2 id="sources-title" tabindex="-1">Choose your sources</h2>
+        <fieldset class="choices">
+          <legend>Do you already have AIOStreams set up with your sports addons?</legend>
+          <label><input type="radio" name="source" value="existing" checked> Yes, I have AIOStreams set up with my sports addons</label>
+          <label><input type="radio" name="source" value="setup"> No, help me set up my sports addons</label>
+        </fieldset>
+        <p>Use the AIOStreams configuration that contains your sports addons. If you keep a separate one for movies and TV, use your sports configuration here.</p>
+        <p>SportsHub shows live games and upcoming fixtures. Replays and highlights won’t appear in SportsHub, even if you enable them in your source addons.</p>
+        <div id="source-setup" hidden>
+          <p>Configure each addon first. Save its settings and copy the manifest URL it gives you.</p>
+          <ul class="sources">
+            <li><a href="https://nuviosports.xyz/configure" target="_blank" rel="noopener noreferrer">NuvioLiveSports ↗</a></li>
+            <li><a href="https://sports.highfly.to/configure" target="_blank" rel="noopener noreferrer">HighFly Sports ↗</a></li>
+            <li><a href="https://cncverse.dpdns.org/" target="_blank" rel="noopener noreferrer">CNCVerse ↗</a></li>
+            <li><a href="https://pengu.uk/" target="_blank" rel="noopener noreferrer">PenguPlay ↗</a></li>
+          </ul>
+          <p>Enable live sports in PenguPlay or live event catalogs in CNCVerse if you use those addons.</p>
+          <p>Open the template in ForTheWeak, or import it by URL on your own AIOStreams instance with Live and HTTP streams enabled. Paste your configured addon manifests, save the configuration, and copy its AIOStreams manifest URL.</p>
+          <div class="actions">
+            <a class="primary cta" href="https://aiostreams.fortheweak.cloud/stremio/configure?template=https%3A%2F%2Fraw.githubusercontent.com%2Freelhumann-glitch%2Fsportshub%2Fmain%2Faiostreams-template.json" target="_blank" rel="noopener noreferrer">Open Template in Public AIOStreams ↗</a>
+            <button type="button" class="link-button" data-copy="template">Copy template URL</button>
+          </div>
+        </div>
+        <details>
+          <summary>Using direct addon manifests instead?</summary>
+          <p>SportsHub can use NuvioLiveSports, HighFly Sports, and CNCVerse directly. Configure them first, then enter their manifest URLs in the matching Cloudflare fields during deployment. PenguPlay uses the AIOStreams path.</p>
+        </details>
+      </section>
+      <section data-step="1" aria-labelledby="catalogs-title" hidden>
+        <h2 id="catalogs-title" tabindex="-1">Choose your catalogs</h2>
+        <fieldset class="choices">
+          <legend>Do you want to use the standard catalogs?</legend>
+          <label><input type="radio" name="catalog-mode" value="standard" checked> Yes, use the standard catalogs</label>
+          <label><input type="radio" name="catalog-mode" value="custom"> No, let me choose</label>
+        </fieldset>
+        <fieldset id="catalog-options" hidden>
+          <legend>Keep the rows you want to see in Nuvio</legend>
+          <div id="catalog-list" class="catalog-list"></div>
+          <h3>Optional league catalogs</h3>
+          <div id="league-list" class="catalog-list"></div>
+        </fieldset>
+        <fieldset class="choices">
+          <legend>Which stream languages do you want?</legend>
+          <label><input type="radio" name="language" value="preferred" checked> English preferred</label>
+          <label><input type="radio" name="language" value="english"> English only</label>
+          <label><input type="radio" name="language" value="selected"> Selected languages</label>
+          <label><input type="radio" name="language" value="any"> Any language</label>
+          <small>English preferred includes English and unlabeled feeds. SportsHub still sorts by quality first.</small>
+        </fieldset>
+        <fieldset id="language-options" hidden>
+          <legend>Select one or more languages</legend>
+          <div id="language-list" class="catalog-list"></div>
+        </fieldset>
+        <label id="unknown-option" hidden><input id="unknown-language" type="checkbox"> Include streams with unverified language</label>
+      </section>
+      <section data-step="2" aria-labelledby="deploy-title" hidden>
+        <h2 id="deploy-title" tabindex="-1">Deploy to Cloudflare</h2>
+        <details>
+          <summary>New to Cloudflare?</summary>
+          <ol class="steps">
+            <li><a href="https://dash.cloudflare.com/sign-up" target="_blank" rel="noopener noreferrer">Create a Cloudflare account ↗</a> and verify your email if prompted.</li>
+            <li>Return here and click <strong>Deploy to Cloudflare</strong>. Sign in and connect the GitHub account where Cloudflare should create the SportsHub repository.</li>
+            <li>Choose a Worker name and follow the prompts. You can use a <code>workers.dev</code> address with the Workers Free plan.</li>
+            <li>After deployment, find the HTTPS address under <strong>Workers &amp; Pages → your SportsHub Worker</strong>.</li>
+          </ol>
+        </details>
+        <ol class="steps">
+          <li>Click <strong>Deploy to Cloudflare</strong>, sign in, and connect GitHub. Cloudflare copies the SportsHub repository and prepares the Worker and its setup fields.</li>
+          <li>In the secret fields, paste your configured AIOStreams manifest under <code>AIOSTREAMS_MANIFEST_URL</code>. For direct addons, use the matching source fields.</li>
+          <li id="custom-deploy" hidden>Paste the value below into <code>SPORTHUB_CATALOGS</code>. If the field is missing, add it in your Worker's <strong>Settings → Variables and Secrets</strong>.</li>
+          <li id="language-deploy" hidden>Paste the language value below into <code>SPORTHUB_STREAM_LANGUAGES</code>. If the field is missing, add it in the same Worker settings.</li>
+          <li>Leave any other blank fields on the Cloudflare page blank.</li>
+          <li>Deploy, then copy the HTTPS address of your new Worker.</li>
+        </ol>
+        <div id="catalog-value-wrap" class="copy-box" hidden>
+          <label for="catalog-value">SPORTHUB_CATALOGS</label>
+          <input id="catalog-value" readonly>
+          <button class="secondary" type="button" data-copy="catalogs">Copy catalog value</button>
+        </div>
+        <div id="language-value-wrap" class="copy-box" hidden>
+          <label for="language-value">SPORTHUB_STREAM_LANGUAGES</label>
+          <input id="language-value" readonly>
+          <button class="secondary" type="button" data-copy="language">Copy language value</button>
+        </div>
+        <a class="primary cta" href="https://deploy.workers.cloudflare.com/?url=https%3A%2F%2Fgithub.com%2Freelhumann-glitch%2Fsportshub" target="_blank" rel="noopener noreferrer">Deploy to Cloudflare ↗</a>
+      </section>
+      <section data-step="3" aria-labelledby="install-title" hidden>
+        <h2 id="install-title" tabindex="-1">Install in Nuvio</h2>
+        <ol class="steps">
+          <li>In the Cloudflare dashboard, go to <strong>Workers &amp; Pages</strong> and select the SportsHub Worker you just deployed.</li>
+          <li>Open <strong>Settings → Domains &amp; Routes</strong> (or the <strong>Domains</strong> tab) and copy your Worker’s <code>workers.dev</code> address, including <code>https://</code>.</li>
+          <li>Paste it into <strong>Your Worker address</strong> below. The wizard adds <code>/manifest.json</code> for you. Click <strong>Copy install link</strong>.</li>
+        </ol>
+        <div class="copy-box">
+          <label for="worker-url">Your Worker address</label>
+          <input id="worker-url" type="url" placeholder="https://sportshub-addon.example.workers.dev" autocomplete="off">
+          <button class="secondary" type="button" data-copy="manifest">Copy install link</button>
+          <output id="manifest-preview" for="worker-url"></output>
+        </div>
+        <p>In Nuvio, open <strong>Settings → Addons → Add Addon</strong> and paste the install link.</p>
+      </section>
+      <noscript><a href="https://github.com/reelhumann-glitch/sportshub#deploy-in-your-browser">Read the setup instructions on GitHub.</a></noscript>
+      <p id="notice" role="status"></p>
+      <div class="wizard-nav">
+        <button type="button" id="back" class="secondary" hidden>Back</button>
+        <button type="button" id="next" class="primary">Continue</button>
+      </div>
+    </div>
+    <footer>Enter private source URLs directly in AIOStreams or Cloudflare.</footer>
+  </main>
+</body>
+</html>

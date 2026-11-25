@@ -1,0 +1,39 @@
+{
+  "name": "sportshub-addons",
+  "version": "0.2.9",
+  "private": true,
+  "type": "module",
+  "cloudflare": {
+    "bindings": {
+      "AIOSTREAMS_MANIFEST_URL": {
+        "description": "Paste your own configured AIOStreams manifest URL, or configure one or more direct sources below."
+      },
+      "NUVIO_MANIFEST_URL": {
+        "description": "Optional direct NuvioLiveSports manifest URL."
+      },
+      "HIGHFLY_MANIFEST_URL": {
+        "description": "Optional direct HighFly Sports manifest URL."
+      },
+      "CNC_MANIFEST_URL": {
+        "description": "Optional direct CNCVerse manifest URL."
+      },
+      "SPORTHUB_CATALOGS": {
+        "description": "Optional. Leave blank for standard catalogs, or paste the catalog list from the SportsHub setup wizard."
+      },
+      "SPORTHUB_STREAM_LANGUAGES": {
+        "description": "Optional. Leave blank for English preferred, or paste the language setting from the SportsHub wizard."
+      }
+    }
+  },
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "test": "node --test"
+  },
+  "devDependencies": {
+    "wrangler": "^4.0.0"
+  },
+  "dependencies": {
+    "@resvg/resvg-wasm": "2.6.2"
+  }
+}
